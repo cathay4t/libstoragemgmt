@@ -1,0 +1,49 @@
+[StorageSystem]
+    * How to get top-level StorageSystem?
+        EnumerateInstances('SSM_StorageSystem') with ParentSystems=="NULL".
+
+    * How to query system name like vendor, module/product name?
+        TODO
+        ProvenanceInfo should do.
+
+    * How to query and compare system firmware version?
+
+    * How to query system status and find out what went wrong?
+
+
+[StoragePool]
+    * What does 'Basic' of SSM_StoragePool['PoolType'] mean?
+        In SSM r25, it seems indicate a disk or disk partition.
+        while 'Aggregated' means disk RAID pool.
+        In your case, your storage might be 'Aggregated' type.
+
+    * Any standard way to tell SSM_StoragePool is one of these type?
+        a) RAID group from disks.
+        b) RAID group from disk partition.
+        c) Aggregate of two or more other pools.
+        d) Allocation from other pool.
+
+        If there is not, I would propose to extend 'PoolType' to
+        'Disk RAID Group', 'Disk slice RAID Group',
+        'Aggregated Pool', 'Pool slice'.
+
+    * Any standard way to query pool membership?
+        If not, I would suggest to extend 'MemberInstanceID' to hold:
+            a) SSM_PhysicalDisk[1] InstanceID.
+            b) SSM_PhysicalDiskSlice InstanceID.
+            c) SSM_StoragePool InstanceID.
+            d) SSM_StoragePoolSlice InstanceID.
+
+    * What's the RAID type of certain pool?
+        How about SSM_StoragePool['RAIDType']:
+            JBOD, RAID0, RAID1, RAID1DP, etc
+
+    * What type of element could current pool create? 
+        How about list with any combination of 
+            * Volume
+            * Snapshot
+            * Pool      
+                # Indicate this pool could be use to assemble
+                # aggregated pool
+            * PoolSlice
+                # Indicate this pool allocate small pool.

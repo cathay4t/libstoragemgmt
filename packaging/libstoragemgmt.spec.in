@@ -168,6 +168,22 @@ BuildArch:      noarch
 The %{libstoragemgmt}-smis-plugin package contains plug-in for generic SMI-S
 array support.
 
+%package        -n %{libstoragemgmt}-ssm-plugin
+Summary:        Files for SSM generic array support for %{libstoragemgmt}
+Group:          System Environment/Libraries
+%if 0%{?suse_version}
+BuildRequires:  python-pywbem
+Requires:       python-pywbem
+%else
+BuildRequires:  pywbem
+Requires:       pywbem
+%endif
+Requires:       %{libstoragemgmt}-python = %{version}-%{release}
+BuildArch:      noarch
+
+%description    -n %{libstoragemgmt}-ssm-plugin
+The %{libstoragemgmt}-smis-plugin package contains plug-in for generic SSM
+array support.
 
 %package        -n %{libstoragemgmt}-netapp-plugin
 Summary:        Files for NetApp array support for %{libstoragemgmt}
@@ -620,6 +636,14 @@ fi
 %{python_sitelib}/lsm/plugin/nstor/nstor.*
 %{_bindir}/nstor_lsmplugin
 %{_mandir}/man1/nstor_lsmplugin.1*
+
+%files -n %{libstoragemgmt}-ssm-plugin
+%defattr(-,root,root,-)
+%dir %{python_sitelib}/lsm/plugin/ssm
+%{python_sitelib}/lsm/plugin/ssm/__init__.*
+%{python_sitelib}/lsm/plugin/ssm/ssm.*
+%{python_sitelib}/lsm/plugin/ssm/utils.*
+%{_bindir}/ssm_lsmplugin
 
 %if 0%{?with_megaraid}
 %files -n %{libstoragemgmt}-megaraid-plugin

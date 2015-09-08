@@ -1,0 +1,67 @@
+v * Remove 'HealthState' and 'IdentifyingDescriptions' from SSM_StorageSystem.
+v * Fix SSM_StorageSystem['OperationalStatus']
+v * SSM_StorageSystem['ProvenanceInfo'] EMBEDDEDINSTANCE
+v * Add SSM_StorageSystem['GivenName']
+v * Change SSM_StorageSystem['DurableName'] to hardware module name, like
+    'Huawei OceanStor S2600T'
+
+  * InstanceID should be 128 bits UUID RFC 4122.
+
+[StoragePool]
+
+  * CIMStoragePool is not a reference.
+  * Add GivenName
+  * Add Huawei_RAIDType property:
+        String
+        { "JBOD", "RAID 0", "RAID 1", "RAID 3", "RAID 4", "RAID 5",
+          "RAID 6", "RAID 10", "RAID 50", "RAID 60"}
+  * Add Huawei_SupportedElementType property:
+        String
+        { "Storage Pool", "Storage Volume","Thin Provisioned Storage Volume"}  
+  
+  * Add Huawei_BasedOnPhysicalPoolIDs property:
+    Indicate this StoragePool is directlly created from instances of
+    SSM_PhysicalPool.
+        Array of string.
+        The InstanceID of SSM_PhysicalPool.
+
+[StorageVolume]
+  * Clean up the properties like 'Setting' which is not defined by SSM.
+  * Add Huawei_PoolIDs property:
+        Array of Instance ID of StoragePool.
+
+LUN Masking or/and Mapping
+
+    [Huawei_InitiatorGroup]
+        * Name
+        * Initiators
+            Array of SSM_EndpointInfo  
+        * AddInitiator()
+        * RemoveInitiator()
+
+    [SSM_EndpointInfo]
+        * Huawei_Type
+            String  {"Initiator", "Target"}
+
+SSM_StorageSystem.Huawei_MapStorageVolume()
+    InitiatorGroup
+    Targets
+    Volume
+
+SSM_StorageSystem.Huawei_UnMapStorageVolume()
+    InitiatorGroup
+    Targets
+    Volume
+
+SSM_StorageSystem.Huawei_CreateInitiatorGroup()
+    Name
+    EndpointType
+    and etc
+      
+
+[SSM_StorageViewInfo]
+  * 
+
+
+[SSM_PhysicalPool]
+  * Add this class.

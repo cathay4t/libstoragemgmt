@@ -45,4 +45,11 @@ dist_bin_SCRIPTS= \
 	smispy/smispy_lsmplugin \
 	nstor/nstor_lsmplugin \
 	ontap/ontap_lsmplugin \
-	targetd/targetd_lsmplugin
+	targetd/targetd_lsmplugin \
+	ssm/ssm_lsmplugin
+
+ssmdir = $(plugindir)/ssm
+ssm_PYTHON = \
+	ssm/__init__.py \
+	ssm/ssm.py \
+	smispy/utils.py
