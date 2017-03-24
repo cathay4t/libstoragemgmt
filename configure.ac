@@ -346,6 +346,10 @@ AX_CHECK_COMPILE_FLAG([-Wall], [CFLAGS="$CFLAGS -Wall"], [], [])
 AX_CHECK_COMPILE_FLAG([-Werror], [CFLAGS="$CFLAGS -Werror"], [], [])
 AX_CHECK_COMPILE_FLAG([-Wextra], [CFLAGS="$CFLAGS -Wextra"], [], [])
 
+AC_ARG_ENABLE(glib, "Use glib for hash and pointer array",
+              [use_glib=yes], [])
+AM_CONDITIONAL([USE_GLIB], [test "x$use_glib" = "xyes"])
+
 AC_CONFIG_FILES([
     libstoragemgmt.pc
     Makefile
