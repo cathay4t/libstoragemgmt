@@ -126,7 +126,6 @@ dnl find libxml2 library, borrowed from xmlsec
 dnl ==========================================================================
 
 PKG_CHECK_MODULES([LIBXML], [libxml-2.0])
-PKG_CHECK_MODULES([LIBGLIB], [glib-2.0 >= 2.22.5])
 
 AC_ARG_WITH([test],
     [AC_HELP_STRING([--without-test],
@@ -348,6 +347,9 @@ AX_CHECK_COMPILE_FLAG([-Wextra], [CFLAGS="$CFLAGS -Wextra"], [], [])
 
 AC_ARG_ENABLE(glib, "Use glib for hash and pointer array",
               [use_glib=yes], [])
+if test "x$use_glib" == "xyes"; then
+    PKG_CHECK_MODULES([LIBGLIB], [glib-2.0 >= 2.22.5])
+fi
 AM_CONDITIONAL([USE_GLIB], [test "x$use_glib" = "xyes"])
 
 AC_CONFIG_FILES([
