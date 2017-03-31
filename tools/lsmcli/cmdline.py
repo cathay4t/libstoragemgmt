@@ -1801,6 +1801,7 @@ class CmdLine(object):
             "serial_num": LocalDisk.serial_num_get,
             "led_status": LocalDisk.led_status_get,
             "link_speed": LocalDisk.link_speed_get,
+            "smart_status": LocalDisk.smart_status_get,
         }
         for disk_path in LocalDisk.list():
             info_dict = {
@@ -1810,6 +1811,7 @@ class CmdLine(object):
                 "serial_num": "",
                 "led_status": Disk.LED_STATUS_UNKNOWN,
                 "link_speed": Disk.LINK_SPEED_UNKNOWN,
+                "smart_status": Disk.SMART_STATUS_UNKNOWN,
             }
             for key in info_dict.keys():
                 try:
@@ -1825,7 +1827,8 @@ class CmdLine(object):
                               info_dict["link_type"],
                               info_dict["serial_num"],
                               info_dict["led_status"],
-                              info_dict["link_speed"]))
+                              info_dict["link_speed"],
+                              info_dict["smart_status"]))
 
         self.display_data(local_disks)
 

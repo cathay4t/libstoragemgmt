@@ -266,6 +266,19 @@ def disk_link_type_to_str(link_type):
     return _enum_type_to_str(link_type, LocalDiskInfo._LINK_TYPE_MAP)
 
 
+def disk_smart_status_to_str(smart_status):
+    if smart_status == '':
+        return "No Support"
+    if smart_status == Disk.SMART_STATUS_UNKNOWN:
+        return "Unknown"
+    if smart_status == Disk.SMART_STATUS_FAIL:
+        return "Failure"
+    if smart_status == Disk.SMART_STATUS_WARN:
+        return "Warning"
+    if smart_status == Disk.SMART_STATUS_GOOD:
+        return "Good"
+
+
 _BATTERY_TYPE_CONV = {
     Battery.TYPE_UNKNOWN: "Unknown",
     Battery.TYPE_OTHER: "Other",
@@ -408,7 +421,7 @@ class LocalDiskInfo(object):
     }
 
     def __init__(self, sd_path, vpd83, rpm, link_type, serial_num, led_status,
-                 link_speed):
+                 link_speed, smart_status):
         self.sd_path = sd_path
         self.vpd83 = vpd83
         self.rpm = rpm
@@ -416,6 +429,8 @@ class LocalDiskInfo(object):
         self.serial_num = serial_num
         self.led_status = led_status
         self.link_speed = link_speed
+        self.smart_status = smart_status
+
 
 class VolumeRAMCacheInfo(object):
 
@@ -824,6 +839,7 @@ class DisplayData(object):
     LOCAL_DISK_HEADER['serial_num'] = 'Serial Number'
     LOCAL_DISK_HEADER['led_status'] = 'LED Status'
     LOCAL_DISK_HEADER['link_speed'] = 'Link Speed'
+    LOCAL_DISK_HEADER['smart_status'] = 'SMART Status'
 
     LOCAL_DISK_COLUMN_SKIP_KEYS = ['rpm', 'led_status', 'link_speed']
 
@@ -832,7 +848,9 @@ class DisplayData(object):
         'link_type': disk_link_type_to_str,
         'led_status': disk_led_status_to_str,
         'link_speed': disk_link_speed_to_str,
+        'smart_status': disk_smart_status_to_str,
     }
+
     LOCAL_DISK_VALUE_CONV_HUMAN = []
 
     VALUE_CONVERT[LocalDiskInfo] = {

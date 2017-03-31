@@ -19,6 +19,7 @@ import six
 from lsm import LsmError, ErrorNumber
 
 from lsm._clib import (_local_disk_vpd83_search, _local_disk_vpd83_get,
+                       _local_disk_smart_status_get,
                        _local_disk_rpm_get, _local_disk_list,
                        _local_disk_link_type_get, _local_disk_ident_led_on,
                        _local_disk_ident_led_off, _local_disk_fault_led_on,
@@ -124,6 +125,45 @@ class LocalDisk(object):
                 No capability required as this is a library level method.
         """
         return _use_c_lib_function(_local_disk_vpd83_get, disk_path)
+
+    @staticmethod
+    def smart_status_get(disk_path):
+        """
+        lsm.LocalDisk.smart_status_get(disk_path)
+
+        Version:
+            1.4
+        Usage:
+            Retrieve the SMART Status of given disk path.
+        Parameters:
+            disk_path (string)
+                The disk path, example '/dev/sdb'.
+        Returns:
+            smart_status (integer)
+                Disk SMART Status:
+                    -1 (lsm.Disk.SMART_STATUS_UNKNOWN):
+                        Unknown SMART Status
+                     0 (lsm.Disk.SMART_STATUS_FAIL):
+                        SMART Status indicates failure
+                     1 (lsm.Disk.SMART_STATUS_WARN):
+                        SMART Status warns of near failure
+                     2 (lsm.Disk.SMART_STATUS_GOOD):
+                        SMART Status indicates good health
+        SpecialExceptions:
+            LsmError
+                ErrorNumber.LIB_BUG
+                    Internal bug.
+                ErrorNumber.INVALID_ARGUMENT
+                    Invalid disk_path. Should be like '/dev/sdb'
+                ErrorNumber.NOT_FOUND_DISK
+                    Provided disk is not found.
+                ErrorNumber.NO_SUPPORT
+                    Not supported.
+        Capability:
+            N/A
+                No capability required as this is a library level method.
+        """
+        return _use_c_lib_function(_local_disk_smart_status_get, disk_path)
 
     @staticmethod
     def rpm_get(disk_path):
