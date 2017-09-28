@@ -19,6 +19,9 @@ import json
 import re
 import errno
 import math
+import tempfile
+import shutil
+import weakref
 
 from lsm import (uri_parse, search_property, size_human_2_size_bytes,
                  Capabilities, LsmError, ErrorNumber, System, Client,
@@ -333,6 +336,15 @@ class MegaRAID(IPlugin):
     def __init__(self):
         self._storcli_bin = None
         self._tmo_ms = 3000    # TODO(Gris Ge): Not implemented yet.
+        self._tmp_dir = tempfile.mkdtemp()
+        self._finalizer = weakref.finalize(self, shutil.rmtree, self._tmp_dir)
+
+    def remove(self):
+        self._finalizer()
+
+    @property
+    def removed(self):
+        return not self._finalizer.alive
 
     def _find_storcli(self):
         """
@@ -376,10 +388,10 @@ class MegaRAID(IPlugin):
                 "This plugin requires root privilege both daemon and client")
         uri_parsed = uri_parse(uri)
         self._storcli_bin = uri_parsed.get('parameters', {}).get('storcli')
-        # change working dir to "/tmp" as storcli will create a log file
+        # change working dir to tmp folder as storcli will create a log file
         # named as 'MegaSAS.log'.
 
-        os.chdir("/tmp")
+        os.chdir(self._tmp_dir)
         if self._storcli_bin:
             self._storcli_exec(['-v'], flag_json=False)
         else:
