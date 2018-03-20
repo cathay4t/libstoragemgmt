@@ -117,6 +117,7 @@ AC_CHECK_HEADERS([yajl/yajl_gen.h yajl/yajl_parse.h], [] , AC_MSG_ERROR([Missing
 AC_CHECK_HEADERS([yajl/yajl_version.h])
 AC_CHECK_LIB([yajl], [yajl_parse], [YAJL_LIBS=-lyajl], AC_MSG_ERROR([Missing yajl library]))
 AC_SUBST([YAJL_LIBS])
+PKG_CHECK_MODULES([LIBJANSSON], [jansson])
 
 dnl if --prefix is /usr, don't use /usr/var for localstatedir
 dnl or /usr/etc for sysconfdir
